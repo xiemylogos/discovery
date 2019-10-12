@@ -3,6 +3,7 @@ package naming
 import (
 	"context"
 	"flag"
+	"github.com/bilibili/discovery/model"
 	"net/url"
 	"os"
 	"strconv"
@@ -137,6 +138,23 @@ func TestDiscovery(t *testing.T) {
 
 }
 
+func TestRegister(t *testing.T) {
+	instance := &Instance{
+		Region:   "test",
+		Zone:     "test1",
+		Env:      "test1",
+		AppID:    "12345",
+		Addrs:    []string{"http://127.0.0.1:8092"},
+		Hostname: "test-host2",
+	}
+	err := addNewInstance(instance)
+	if err != nil {
+		t.Errorf("Register err:%s", err)
+		return
+	}
+	t.Logf("register succ")
+}
+
 func addNewInstance(ins *Instance) error {
 	cli := xhttp.NewClient(&xhttp.ClientConfig{
 		Timeout:   xtime.Duration(time.Second * 30),
@@ -156,6 +174,47 @@ func addNewInstance(ins *Instance) error {
 		Code int `json:"code"`
 	})
 	return cli.Post(context.TODO(), "http://127.0.0.1:7171/discovery/register", "", params, &res)
+}
+
+func TestFetch(t *testing.T) {
+	instance := &Instance{
+		AppID: "provider",
+		Zone:  "sh1",
+		Env:   "test",
+	}
+	res, err := getInstance(instance)
+	if err != nil {
+		t.Errorf("Get fetch err:%s", err)
+		return
+	}
+	for _,v := range res.Instances {
+		for _,instance  := range v {
+			t.Logf("add:%s",instance.Addrs)
+		}
+	}
+	t.Logf("getInstance succ:%v", res.Instances)
+}
+
+func getInstance(ins *Instance) (model.InstanceInfo, error) {
+	cli := xhttp.NewClient(&xhttp.ClientConfig{
+		Timeout:   xtime.Duration(time.Second * 30),
+		Dial:      xtime.Duration(time.Second),
+		KeepAlive: xtime.Duration(time.Second * 30),
+	})
+	params := url.Values{}
+	params.Set("env", ins.Env)
+	params.Set("zone", ins.Zone)
+	params.Set("appid", ins.AppID)
+	params.Set("status", "1")
+	params.Set("latest_timestamp", strconv.FormatInt(time.Now().UnixNano(), 10))
+	res := new(struct {
+		Code    int                    `json:"code"`
+		Message string                 `json:"message"`
+		Ttt     int                    `json:"ttl"`
+		Data    model.InstanceInfo `json:"data"`
+	})
+	err := cli.Get(context.TODO(), "http://127.0.0.1:7171/discovery/fetch", "", params, &res)
+	return res.Data, err
 }
 
 func TestUseScheduler(t *testing.T) {
