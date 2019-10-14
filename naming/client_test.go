@@ -3,13 +3,14 @@ package naming
 import (
 	"context"
 	"flag"
-	"github.com/bilibili/discovery/model"
 	"net/url"
 	"os"
 	"strconv"
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/bilibili/discovery/model"
 
 	"github.com/bilibili/discovery/conf"
 	"github.com/bilibili/discovery/discovery"
@@ -22,7 +23,7 @@ import (
 
 func TestMain(m *testing.M) {
 	flag.Parse()
-	go mockDiscoverySvr()
+	//go mockDiscoverySvr()
 	time.Sleep(time.Second)
 	os.Exit(m.Run())
 }
@@ -143,7 +144,7 @@ func TestRegister(t *testing.T) {
 		Region:   "test",
 		Zone:     "test1",
 		Env:      "test1",
-		AppID:    "12345",
+		AppID:    "router@12345",
 		Addrs:    []string{"http://127.0.0.1:8092"},
 		Hostname: "test-host2",
 	}
@@ -187,9 +188,9 @@ func TestFetch(t *testing.T) {
 		t.Errorf("Get fetch err:%s", err)
 		return
 	}
-	for _,v := range res.Instances {
-		for _,instance  := range v {
-			t.Logf("add:%s",instance.Addrs)
+	for _, v := range res.Instances {
+		for _, instance := range v {
+			t.Logf("add:%s", instance.Addrs)
 		}
 	}
 	t.Logf("getInstance succ:%v", res.Instances)
@@ -208,13 +209,34 @@ func getInstance(ins *Instance) (model.InstanceInfo, error) {
 	params.Set("status", "1")
 	params.Set("latest_timestamp", strconv.FormatInt(time.Now().UnixNano(), 10))
 	res := new(struct {
-		Code    int                    `json:"code"`
-		Message string                 `json:"message"`
-		Ttt     int                    `json:"ttl"`
+		Code    int                `json:"code"`
+		Message string             `json:"message"`
+		Ttt     int                `json:"ttl"`
 		Data    model.InstanceInfo `json:"data"`
 	})
 	err := cli.Get(context.TODO(), "http://127.0.0.1:7171/discovery/fetch", "", params, &res)
 	return res.Data, err
+}
+
+func TestFetchApp(t *testing.T) {
+	params := url.Values{}
+	params.Set("appname", "router")
+	cli := xhttp.NewClient(&xhttp.ClientConfig{
+		Timeout:   xtime.Duration(time.Second * 30),
+		Dial:      xtime.Duration(time.Second),
+		KeepAlive: xtime.Duration(time.Second * 30),
+	})
+	res := new(struct {
+		Addr map[string][]string `json:"addr"`
+	})
+	err := cli.Get(context.TODO(), "http://127.0.0.1:7171/discovery/fetchapp", "", params, &res)
+	if err != nil {
+		t.Errorf("fetch app failed:%s", err)
+		return
+	}
+	for k,v := range res.Addr {
+		t.Logf("k:%s,v:%v",k,v)
+	}
 }
 
 func TestUseScheduler(t *testing.T) {

@@ -40,6 +40,11 @@ type ArgCancel struct {
 }
 
 // ArgFetch define fetch param.
+type ArgFetchApp struct {
+	AppName  string `form:"appname" validate:"required"`
+}
+
+// ArgFetch define fetch param.
 type ArgFetch struct {
 	Zone   string `form:"zone"`
 	Env    string `form:"env" validate:"required"`

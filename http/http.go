@@ -35,6 +35,7 @@ func innerRouter(e *bm.Engine) {
 		group.POST("/renew", renew)
 		group.POST("/cancel", cancel)
 		group.GET("/fetch/all", initProtect, fetchAll)
+		group.GET("/fetchapp",initProtect,fetchApp)
 		group.GET("/fetch", initProtect, fetch)
 		group.GET("/fetchs", initProtect, fetchs)
 		group.GET("/poll", initProtect, poll)

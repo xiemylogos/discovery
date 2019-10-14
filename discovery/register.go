@@ -57,6 +57,10 @@ func (d *Discovery) FetchAll(c context.Context) (im map[string][]*model.Instance
 	return d.registry.FetchAll()
 }
 
+func (d *Discovery) FetchApp(c context.Context,arg *model.ArgFetchApp) (im map[string][]string,err error) {
+	return d.registry.FetchApp(arg.AppName)
+}
+
 // Fetch fetch all instances by appid.
 func (d *Discovery) Fetch(c context.Context, arg *model.ArgFetch) (info *model.InstanceInfo, err error) {
 	return d.registry.Fetch(arg.Zone, arg.Env, arg.AppID, 0, arg.Status)
