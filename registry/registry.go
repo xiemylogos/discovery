@@ -158,19 +158,31 @@ func (r *Registry) FetchAll() (im map[string][]*model.Instance) {
 	return
 }
 
-// FetchApp fetch app instances of
-func (r *Registry) FetchApp(appname string) (im map[string][]string, err error) {
+// FetchApps fetch app instances of
+func (r *Registry) FetchApp(appname string) (im *model.Instance,err error) {
+		ass := r.allapp()
+		for _, as := range ass {
+			for _, a := range as.App("") {
+				apps := strings.Split(a.AppID, "@")
+				if apps[0] == appname {
+					im = a.Instances()[0]
+				}
+			}
+		}
+		return
+}
+
+// FetchApps fetch app instances of
+func (r *Registry) FetchApps(appname string) (im map[string][]*model.Instance, err error) {
 	ass := r.allapp()
-	im = make(map[string][]string)
+	im = make(map[string][]*model.Instance)
 	for _, as := range ass {
 		for _, a := range as.App("") {
 			apps := strings.Split(a.AppID, "@")
 			if apps[0] == appname {
-				addrs := make([]string, 0)
-				for _, v := range a.Instances() {
-					addrs = append(addrs, v.Addrs...)
-				}
-				im[a.AppID] = addrs
+				instance := make([]*model.Instance, 0)
+				instance = append(instance, a.Instances()...)
+				im[a.AppID] = instance
 			}
 		}
 	}

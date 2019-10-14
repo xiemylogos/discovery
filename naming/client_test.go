@@ -218,6 +218,27 @@ func getInstance(ins *Instance) (model.InstanceInfo, error) {
 	return res.Data, err
 }
 
+func TestFetchApps(t *testing.T) {
+	params := url.Values{}
+	params.Set("appname", "router")
+	cli := xhttp.NewClient(&xhttp.ClientConfig{
+		Timeout:   xtime.Duration(time.Second * 30),
+		Dial:      xtime.Duration(time.Second),
+		KeepAlive: xtime.Duration(time.Second * 30),
+	})
+	res := new(struct {
+		Data map[string][]*model.Instance `json:"data"`
+	})
+	err := cli.Get(context.TODO(), "http://127.0.0.1:7171/discovery/fetchapps", "", params, &res)
+	if err != nil {
+		t.Errorf("fetch app failed:%s", err)
+		return
+	}
+	for k,v := range res.Data {
+		t.Logf("k:%s,v:%v",k,v)
+	}
+}
+
 func TestFetchApp(t *testing.T) {
 	params := url.Values{}
 	params.Set("appname", "router")
@@ -227,16 +248,14 @@ func TestFetchApp(t *testing.T) {
 		KeepAlive: xtime.Duration(time.Second * 30),
 	})
 	res := new(struct {
-		Addr map[string][]string `json:"addr"`
+		Data    model.Instance `json:"data"`
 	})
 	err := cli.Get(context.TODO(), "http://127.0.0.1:7171/discovery/fetchapp", "", params, &res)
 	if err != nil {
 		t.Errorf("fetch app failed:%s", err)
 		return
 	}
-	for k,v := range res.Addr {
-		t.Logf("k:%s,v:%v",k,v)
-	}
+	t.Logf("addr:%v",res)
 }
 
 func TestUseScheduler(t *testing.T) {

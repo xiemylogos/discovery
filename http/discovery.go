@@ -70,6 +70,15 @@ func fetchApp(c *bm.Context) {
 	}
 	c.JSON(dis.FetchApp(c,arg))
 }
+
+func fetchApps(c *bm.Context) {
+	arg := new(model.ArgFetchApp)
+	if err := c.Bind(arg); err != nil {
+		return
+	}
+	c.JSON(dis.FetchApps(c,arg))
+}
+
 func fetch(c *bm.Context) {
 	arg := new(model.ArgFetch)
 	if err := c.Bind(arg); err != nil {
