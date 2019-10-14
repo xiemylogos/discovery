@@ -174,7 +174,6 @@ func (r *Registry) FetchApp(appname string) (im map[string][]string, err error) 
 			}
 		}
 	}
-	fmt.Println("xiexie :len",len(im))
 	return
 }
 
