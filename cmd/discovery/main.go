@@ -21,7 +21,7 @@ func main() {
 	}
 	log.Init(conf.Conf.Log)
 	dis, cancel := discovery.New(conf.Conf)
-	http.Init(conf.Conf, dis)
+	http.Init(conf.Conf, dis,false,"","")
 	// init signal
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, syscall.SIGHUP, syscall.SIGQUIT, syscall.SIGTERM, syscall.SIGINT)
