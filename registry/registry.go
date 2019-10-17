@@ -181,8 +181,11 @@ func (r *Registry) FetchApps(appname string) (im map[string][]*model.Instance, e
 	im = make(map[string][]*model.Instance)
 	for _, as := range ass {
 		for _, a := range as.App("") {
-			apps := strings.Split(a.AppID, "@")
-			if apps[0] == appname {
+			apps := strings.Split(a.AppID, "-")
+			if len(apps) != 3 {
+				break
+			}
+			if apps[1] == appname {
 				instance := make([]*model.Instance, 0)
 				instance = append(instance, a.Instances()...)
 				im[a.AppID] = instance

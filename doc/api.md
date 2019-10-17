@@ -513,3 +513,141 @@ POST http://HOST/discovery/set
 ```shell
 curl 'http://127.0.0.1:7171/discovery/set' -d "zone=sh1&env=test&appid=provider&hostname=myhostname&status=1&color=red&hostname=myhostname2&status=1&color=red"
 ```
+
+### 获取对应实例fetchapp
+
+*HTTP*
+
+GET http://HOST/discovery/fetchapp
+
+*请求参数*
+
+| 参数名   | 必选  | 类型              | 说明                             |
+| -------- | ----- | ----------------- | -------------------------------- |
+| appid    | true  | string            | 服务名标识                       |
+
+*返回结果*
+
+```json
+{
+    "code": 0,
+    "data": {
+        "instances": {
+            "zone001": [
+                {
+                    "zone": "zone001",
+                    "env": "uat",
+                    "appid": "app_server_0",
+                    "hostname": "hostname000000",
+                    "color": "",
+                    "version": "111",
+                    "metadata": {
+                        "provider": "",
+                        "weight": "10"
+                    },
+                    "addrs": [
+                        "gorpc://172.1.1.1:8089"
+                    ],
+                    "status": 1,
+                    "reg_timestamp": 1525948301833084700,
+                    "up_timestamp": 1525948301833084700,
+                    "renew_timestamp": 1525949202959821300,
+                    "dirty_timestamp": 1525948301848680000,
+                    "latest_timestamp": 1525948301833084700
+                }
+            ]
+        },
+        "latest_timestamp": 1525948301833084700
+    }
+}
+```
+
+*CURL*
+```shell
+curl 'http://127.0.0.1:7171/discovery/fetchapp?appid=server'
+```
+
+### 批量获取对应实例fetchappss
+
+*HTTP*
+
+GET http://HOST/discovery/fetchapps
+
+*请求参数*
+
+| 参数名   | 必选  | 类型              | 说明                             |
+| -------- | ----- | ----------------- | -------------------------------- |
+| appid    | true  | string            | 服务名标识                       |
+
+*返回结果*
+
+```json
+{
+    "code": 0,
+    "data": {
+        "app_id_0": {
+            "instances": {
+                "zone001": [
+                    {
+                        "zone": "zone001",
+                        "env": "uat",
+                        "appid": "app_server_001",
+                        "hostname": "hostname000000",
+                        "color": "",
+                        "version": "111",
+                        "metadata": {
+                            "provider": "",
+                            "weight": "10"
+                        },
+                        "addrs": [
+                            "http://172.1.1.1:8080",
+                            "gorpc://172.1.1.1:8089"
+                        ],
+                        "status": 1,
+                        "reg_timestamp": 1525948301833084700,
+                        "up_timestamp": 1525948301833084700,
+                        "renew_timestamp": 1525949202959821300,
+                        "dirty_timestamp": 1525948301848680000,
+                        "latest_timestamp": 1525948301833084700
+                    }
+                ]
+            },
+            "latest_timestamp": 1525948301833084700
+        },
+        "app_id_1": {
+            "instances": {
+                "zone001": [
+                    {
+                        "zone": "zone001",
+                        "env": "uat",
+                        "appid": "app_server_002",
+                        "hostname": "hostname111111",
+                        "color": "",
+                        "version": "222",
+                        "metadata": {
+                            "provider": "",
+                            "weight": "10"
+                        },
+                        "addrs": [
+                            "http://172.1.1.1:7070",
+                            "gorpc://172.1.1.1:7079"
+                        ],
+                        "status": 1,
+                        "reg_timestamp": 1525948301833084700,
+                        "up_timestamp": 1525948301833084700,
+                        "renew_timestamp": 1525949202959821300,
+                        "dirty_timestamp": 1525948301848680000,
+                        "latest_timestamp": 1525948301833084700
+                    }
+                ]
+            },
+            "latest_timestamp": 1525948297987066600
+        }
+    }
+}
+```
+
+*CURL*
+```shell
+curl 'http://127.0.0.1:7171/discovery/fetchapps?appid=server'
+```
