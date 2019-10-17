@@ -163,8 +163,11 @@ func (r *Registry) FetchApp(appname string) (im *model.Instance,err error) {
 		ass := r.allapp()
 		for _, as := range ass {
 			for _, a := range as.App("") {
-				apps := strings.Split(a.AppID, "@")
-				if apps[0] == appname {
+				apps := strings.Split(a.AppID, "-")
+				if len(apps) != 3 {
+					break
+				}
+				if apps[1] == appname {
 					im = a.Instances()[0]
 				}
 			}
