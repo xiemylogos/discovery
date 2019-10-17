@@ -158,16 +158,20 @@ func (r *Registry) FetchAll() (im map[string][]*model.Instance) {
 	return
 }
 
+func getMatchApp(app string) string {
+	index := strings.LastIndex(app,"-")
+	if index != -1 {
+		return app[:index]
+	}
+	return  ""
+}
+
 // FetchApps fetch app instances of
 func (r *Registry) FetchApp(appname string) (im *model.Instance,err error) {
 		ass := r.allapp()
 		for _, as := range ass {
 			for _, a := range as.App("") {
-				apps := strings.Split(a.AppID, "-")
-				if len(apps) != 3 {
-					break
-				}
-				if apps[1] == appname {
+				if getMatchApp(a.AppID) == appname {
 					im = a.Instances()[0]
 				}
 			}
@@ -181,11 +185,7 @@ func (r *Registry) FetchApps(appname string) (im map[string][]*model.Instance, e
 	im = make(map[string][]*model.Instance)
 	for _, as := range ass {
 		for _, a := range as.App("") {
-			apps := strings.Split(a.AppID, "-")
-			if len(apps) != 3 {
-				break
-			}
-			if apps[1] == appname {
+			if getMatchApp(a.AppID) == appname {
 				instance := make([]*model.Instance, 0)
 				instance = append(instance, a.Instances()...)
 				im[a.AppID] = instance
