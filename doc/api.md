@@ -9,6 +9,8 @@
 - [长轮询批量获取实例polls](#长轮询批量获取实例polls)
 - [获取node节点](#获取node节点)
 - [修改实例信息set](#修改实例信息set)
+- [获取对应实例fetchapp](#获取对应实例fetchapp)
+- [批量获取对应实例fetchapps](#批量获取对应实例fetchappss)
 
 
 ### 字段定义
