@@ -55,6 +55,7 @@ type Instance struct {
 
 	// Status enum instance status
 	Status uint32 `json:"status"`
+	Pubkey string `json:"pubkey"`
 
 	// timestamp
 	RegTimestamp   int64 `json:"reg_timestamp"`
@@ -77,6 +78,7 @@ func NewInstance(arg *ArgRegister) (i *Instance) {
 		Addrs:           arg.Addrs,
 		Version:         arg.Version,
 		Status:          arg.Status,
+		Pubkey:          arg.PubKey,
 		RegTimestamp:    now,
 		UpTimestamp:     now,
 		LatestTimestamp: now,

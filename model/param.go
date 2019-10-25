@@ -7,6 +7,7 @@ type ArgRegister struct {
 	Env             string   `form:"env" validate:"required"`
 	AppID           string   `form:"appid" validate:"required"`
 	Hostname        string   `form:"hostname" validate:"required"`
+	PubKey			string   `form:"pubkey" validate:"required"`
 	Status          uint32   `form:"status" validate:"required"`
 	Addrs           []string `form:"addrs" validate:"gt=0"`
 	Version         string   `form:"version"`

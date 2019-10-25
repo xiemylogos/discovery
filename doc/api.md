@@ -52,7 +52,8 @@ POST http://HOST/discovery/register
 | appid    | true  | string            | 服务名标识                       |
 | hostname | true  | string            | 主机名                           |
 | addrs    | true  | []string          | 服务地址列表                     |
-| status   | true  | int               | 状态，1表示接收流量，2表示不接收 |
+| status   | true  | int               | 状态，1表示接收流量，2表示不接收     |
+| pubkey   | true  | string            | 公钥                            |
 | color    | false | string            | 灰度或集群标识                   |
 | metadata | false | json string | 业务自定义信息      必须为map[string]string 的json格式            |
 
@@ -185,6 +186,7 @@ GET http://HOST/discovery/fetch
                         "gorpc://172.1.1.1:8089"
                     ],
                     "status": 1,
+                    "pubkey": "02fd121f5477c617c1ea61b17afe888b77273b5f38347174852e41be778a802118",
                     "reg_timestamp": 1525948301833084700,
                     "up_timestamp": 1525948301833084700,
                     "renew_timestamp": 1525949202959821300,
@@ -243,6 +245,7 @@ GET http://HOST/discovery/fetchs
                             "gorpc://172.1.1.1:8089"
                         ],
                         "status": 1,
+                        "pubkey": "02fd121f5477c617c1ea61b17afe888b77273b5f38347174852e41be778a802118",
                         "reg_timestamp": 1525948301833084700,
                         "up_timestamp": 1525948301833084700,
                         "renew_timestamp": 1525949202959821300,
@@ -272,6 +275,7 @@ GET http://HOST/discovery/fetchs
                             "gorpc://172.1.1.1:7079"
                         ],
                         "status": 1,
+                        "pubkey": "033670e83623bba256c65ec92715e44ea6cd57170876cdae275dc44727e6c74094",
                         "reg_timestamp": 1525948301833084700,
                         "up_timestamp": 1525948301833084700,
                         "renew_timestamp": 1525949202959821300,
@@ -551,6 +555,7 @@ GET http://HOST/discovery/fetchapp
                         "gorpc://172.1.1.1:8089"
                     ],
                     "status": 1,
+                    "pubkey": "02fd121f5477c617c1ea61b17afe888b77273b5f38347174852e41be778a802118",
                     "reg_timestamp": 1525948301833084700,
                     "up_timestamp": 1525948301833084700,
                     "renew_timestamp": 1525949202959821300,
@@ -606,6 +611,7 @@ GET http://HOST/discovery/fetchapps
                             "gorpc://172.1.1.1:8089"
                         ],
                         "status": 1,
+                        "pubkey": "02fd121f5477c617c1ea61b17afe888b77273b5f38347174852e41be778a802118",
                         "reg_timestamp": 1525948301833084700,
                         "up_timestamp": 1525948301833084700,
                         "renew_timestamp": 1525949202959821300,
@@ -635,6 +641,7 @@ GET http://HOST/discovery/fetchapps
                             "gorpc://172.1.1.1:7079"
                         ],
                         "status": 1,
+                         "pubkey":"033670e83623bba256c65ec92715e44ea6cd57170876cdae275dc44727e6c74094"
                         "reg_timestamp": 1525948301833084700,
                         "up_timestamp": 1525948301833084700,
                         "renew_timestamp": 1525949202959821300,
