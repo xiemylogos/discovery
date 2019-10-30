@@ -17,18 +17,13 @@ var (
 )
 
 // Init init http
-func Init(c *conf.Config, s *discovery.Discovery, isTls bool, certFile, keyFile string) {
+func Init(c *conf.Config, s *discovery.Discovery) {
 	dis = s
 	engineInner := bm.DefaultServer(c.HTTPServer)
 	innerRouter(engineInner)
-	if !isTls {
-		if err := engineInner.Start(); err != nil {
-			log.Error("bm.DefaultServer error(%v)", err)
-			panic(err)
-		}
-	} else {
+	if c.EnableTls {
 		go func() {
-			if err := engineInner.RunTLS(c.HTTPServer.Addr, "", ""); err != nil {
+			if err := engineInner.RunTLS(c.HTTPServer.Addr, c.CertFile, c.KeyFile); err != nil {
 				if errors.Cause(err) == http.ErrServerClosed {
 					log.Info("RunTls: server closed")
 					return
@@ -36,6 +31,11 @@ func Init(c *conf.Config, s *discovery.Discovery, isTls bool, certFile, keyFile 
 				panic(errors.Wrapf(err, "RunTLS: engine.ListenServer %v)", c.HTTPServer.Addr))
 			}
 		}()
+	} else {
+		if err := engineInner.Start(); err != nil {
+			log.Error("bm.DefaultServer error(%v)", err)
+			panic(err)
+		}
 	}
 
 }

@@ -41,6 +41,9 @@ type Config struct {
 	Log           *log.Config
 	Scheduler     []byte
 	EnableProtect bool
+	EnableTls     bool
+	CertFile      string
+	KeyFile       string
 }
 
 // Fix fix env config.
